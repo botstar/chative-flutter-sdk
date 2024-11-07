@@ -31,7 +31,7 @@ class ChativeWidget extends StatefulWidget {
   final ChativeWidgetController? controller;
   final String channelId;
   final Map<String, dynamic>? user;
-  final Widget? headerComponent;
+  final Widget? headerWidget;
   final BoxDecoration? containerDecoration;
   final double insetTop;
   final double insetBottom;
@@ -45,7 +45,7 @@ class ChativeWidget extends StatefulWidget {
     required this.channelId,
     this.controller,
     this.user,
-    this.headerComponent,
+    this.headerWidget,
     this.containerDecoration,
     this.insetTop = 20,
     this.insetBottom = 20,
@@ -121,7 +121,7 @@ class _ChativeWidgetState extends State<ChativeWidget> {
                 ),
             child: Column(
               children: [
-                if (widget.headerComponent != null) widget.headerComponent!,
+                if (widget.headerWidget != null) widget.headerWidget!,
                 Expanded(
                   child: Webview(
                     key: _webViewKey,

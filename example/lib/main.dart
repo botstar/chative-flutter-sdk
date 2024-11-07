@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
             insetTop: 50,
             // insetBottom: 50,
             //@ You can also add a header component to the chat widget
-            // headerComponent: Container(
+            // headerWidget: Container(
             //   color: Colors.blue,
             //   height: 50,
             //   child: Center(
