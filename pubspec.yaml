@@ -1,7 +1,7 @@
 name: chative_sdk
-description: "A new Flutter package project."
+description: "A Flutter client sdk for chative. Integrate Chative Flutter client into your flutter app and talk to your visitors/users in real time."
 version: 0.1.0
-homepage:
+homepage: https://github.com/botstar/chative-flutter-sdk
 
 environment:
   sdk: ^3.5.4

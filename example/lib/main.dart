@@ -58,19 +58,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final ChativeWidgetController _controller = ChativeWidgetController();
 
-  final channelId = 'YOUR_CHANNEL_ID';
-  final user = {
-    'user_id': 'UNIQUE_USER_ID',
-    'user': {
-      'email': 'abc@gmail.com',
-      'first_name': 'Chative',
-      'last_name': 'User',
-      'phone': '1234567890',
-    },
-  };
+  final channelId = 's3bdde97e-894d-4092-a021-d7c04cc2602f';
+  // Map<String, Object>? user = {
+  //   'user_id': 'UNIQUE_USER_ID',
+  //   'user': {
+  //     'email': 'abc@gmail.com',
+  //     'first_name': 'Chative',
+  //     'last_name': 'User',
+  //     'phone': '1234567890',
+  //   },
+  // };
+  Map<String, Object>? user = null;
 
-  void _ShowChat() {
+  void _showChat() {
     _controller.show();
+  }
+
+  void _clearData() {
+    _controller.clearData();
   }
 
   @override
@@ -85,13 +90,20 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Stack(
         children: [
           Center(
-            child: ElevatedButton(
-              onPressed: () {
-                _controller.show();
-              },
-              child: Text('Show Chat Widget'),
-            ),
-          ),
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: _showChat,
+                child: Text('Show Chat Widget'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _clearData,
+                child: Text('Clear Data'),
+              ),
+            ],
+          )),
           ChativeWidget(
             channelId: channelId,
             controller: _controller,
