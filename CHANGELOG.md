@@ -1,4 +1,4 @@
-## 0.0.1
+## 0.5.0
 - **Initial Release** of the [Chative.IO Flutter Widget](https://github.com/botstar/chative-flutter-sdk) on 2024-11-08.
 - **Customizable Chat Interface**: Easily tailor the chat widget to match your app's design.
 - **Programmatic Show/Hide**: Display or hide the chat widget using `ChativeWidgetController`.
