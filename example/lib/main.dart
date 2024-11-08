@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:chative_sdk/chative_sdk.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,17 +56,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final ChativeWidgetController _controller = ChativeWidgetController();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  final channelId = 'CHANNEL_ID';
+  //@ Can bind user data to the chat widget
+  // Map<String, Object>? user = {
+  //   'user_id': 'UNIQUE_USER_ID',
+  //   'user': {
+  //     'email': 'abc@gmail.com',
+  //     'first_name': 'Chative',
+  //     'last_name': 'User',
+  //     'phone': '1234567890',
+  //   },
+  // };
+  Map<String, Object>? user = null;
+
+  void _showChat() {
+    _controller.show();
+  }
+
+  void _clearData() {
+    _controller.clearData();
   }
 
   @override
@@ -77,49 +88,63 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      body: Stack(
+        children: [
+          Center(
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: _showChat,
+                child: Text('Show Chat Widget'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _clearData,
+                child: Text('Clear Data'),
+              ),
+            ],
+          )),
+          ChativeWidget(
+            channelId: channelId,
+            controller: _controller,
+            user: user,
+            insetTop: 50,
+            // insetBottom: 50,
+            //@ You can also add a header component to the chat widget
+            // headerWidget: Container(
+            //   color: Colors.blue,
+            //   height: 50,
+            //   child: Center(
+            //     child: Text(
+            //       'Chative Widget Header',
+            //       style: TextStyle(
+            //         color: Colors.white,
+            //         fontSize: 20,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            onClosed: () {
+              print('Chat widget closed');
+            },
+            onLoaded: () {
+              print('Chat widget loaded');
+            },
+            onNewMessage: () {
+              print('New message received');
+            },
+            onError: (message) {
+              print('Error: $message');
+            },
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _ShowChat,
+      //   tooltip: 'Increment',
+      //   child: const Icon(Icons.add),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
