@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:chative_sdk/src/constants.dart';
 import 'package:chative_sdk/src/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 typedef OnClosed = void Function();
 typedef OnLoaded = void Function();
@@ -18,122 +19,155 @@ class Webview extends StatefulWidget {
   final OnError? onError;
 
   const Webview({
-    Key? key,
+    super.key,
     required this.channelId,
     this.user,
     this.onLoaded,
     this.onClosedWidget,
     this.onNewMessage,
     this.onError,
-  }) : super(key: key);
+  });
 
   @override
   State<Webview> createState() => WebviewState();
 }
 
 class WebviewState extends State<Webview> {
-  InAppWebViewController? _controller;
-  final browser = InAppBrowser();
+  late final WebViewController _controller;
+  WebViewController? _externalController;
 
   @override
   void initState() {
     super.initState();
+    _initController();
+  }
+
+  void _initController() {
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
+      ..enableZoom(false)
+      ..addJavaScriptChannel(
+        'FlutterWebView',
+        onMessageReceived: (JavaScriptMessage message) {
+          Map<String, dynamic> parsedData;
+          try {
+            parsedData = jsonDecode(message.message);
+          } catch (e) {
+            parsedData = {};
+          }
+
+          switch (parsedData['event']) {
+            case 'closed':
+              widget.onClosedWidget?.call();
+              break;
+            case 'new-agent-message':
+              widget.onNewMessage?.call();
+              break;
+            case 'ready':
+              widget.onLoaded?.call();
+              break;
+            case 'error':
+              widget.onError?.call(parsedData['message'] ?? 'Unknown error');
+              break;
+            default:
+              break;
+          }
+        },
+      )
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) async {
+            if (!request.url.contains(widgetUrl)) {
+              _showExternalWebView(request.url);
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+          onPageFinished: (String url) async {
+            await _controller
+                .runJavaScript(generateScriptGetError(widget.channelId));
+            await _controller.runJavaScript(generateScript(widget.user ?? {}));
+          },
+          onWebResourceError: (WebResourceError error) {
+            widget.onError?.call(error.description);
+          },
+        ),
+      )
+      ..loadRequest(
+        Uri.parse(
+          '$widgetUrl/site/${widget.channelId}?mode=livechat&state=${widget.user != null ? 'off' : 'on'}',
+        ),
+      );
+  }
+
+  void _showExternalWebView(String url) {
+    _externalController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(url));
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog.fullscreen(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                color: Colors.grey[100],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.open_in_browser),
+                          onPressed: () async {
+                            if (await canLaunchUrl(Uri.parse(url))) {
+                              await launchUrl(
+                                Uri.parse(url),
+                                mode: LaunchMode.externalApplication,
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: WebViewWidget(
+                  controller: _externalController!,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return InAppWebView(
-      initialSettings: InAppWebViewSettings(
-        javaScriptEnabled: true,
-        useOnLoadResource: true,
-        allowFileAccess: true,
-        allowUniversalAccessFromFileURLs: true,
-        allowFileAccessFromFileURLs: true,
-        allowContentAccess: true,
-      ),
-      initialUrlRequest: URLRequest(
-        url: WebUri(
-          '$widgetUrl/${widget.channelId}?mode=livechat&state=${widget.user != null ? 'off' : 'on'}',
-        ),
-      ),
-      shouldOverrideUrlLoading: (controller, navigationAction) async {
-        final url = navigationAction.request.url!;
-        if (!url.toString().contains('https://messenger.svc.chative.io')) {
-          await browser.openUrlRequest(urlRequest: URLRequest(url: url));
-          return NavigationActionPolicy.CANCEL;
-        }
-        return NavigationActionPolicy.ALLOW;
-      },
-      onWebViewCreated: (controller) {
-        _controller = controller;
-
-        // Thêm JavaScript Handler
-        _controller?.addJavaScriptHandler(
-          handlerName: 'FlutterWebView',
-          callback: (args) {
-            if (args.isNotEmpty && args[0] is String) {
-              String message = args[0];
-              Map<String, dynamic> parsedData;
-              try {
-                parsedData = jsonDecode(message);
-              } catch (e) {
-                parsedData = {};
-              }
-
-              switch (parsedData['event']) {
-                case 'closed':
-                  widget.onClosedWidget?.call();
-                  break;
-                case 'new-agent-message':
-                  widget.onNewMessage?.call();
-                  break;
-                case 'ready':
-                  widget.onLoaded?.call();
-                  break;
-                case 'error':
-                  widget.onError
-                      ?.call(parsedData['message'] ?? 'Unknown error');
-                  break;
-                default:
-                  break;
-              }
-            }
-          },
-        );
-      },
-      onLoadStart: (controller, url) {},
-      onLoadStop: (controller, url) async {
-        _controller?.evaluateJavascript(
-            source: generateScriptGetError(widget.channelId));
-        _controller?.evaluateJavascript(
-            source: generateScript(widget.user ?? {}));
-      },
-      onConsoleMessage: (controller, consoleMessage) {},
-      onReceivedError: (controller, request, error) {
-        widget.onError?.call(error.description);
-      },
-      onReceivedHttpError: (controller, request, response) {
-        widget.onError?.call(response.reasonPhrase ?? 'Unknown error');
-      },
-    );
+    return WebViewWidget(controller: _controller);
   }
 
   Future<void> injectJavaScript(String script) async {
-    if (_controller != null) {
-      await _controller!.evaluateJavascript(source: script);
-    }
+    await _controller.runJavaScript(script);
   }
 
   Future<void> reload() async {
-    if (_controller != null) {
-      await _controller!.reload();
-    }
+    await _controller.reload();
   }
 
   Future<void> clearLocalStorage() async {
-    if (_controller != null) {
-      await _controller!.evaluateJavascript(source: 'localStorage.clear();');
-      reload();
-    }
+    await _controller.runJavaScript('localStorage.clear();');
+    await reload();
   }
 }

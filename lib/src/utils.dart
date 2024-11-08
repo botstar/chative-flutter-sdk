@@ -24,15 +24,15 @@ String generateScript(Map<String, dynamic> user) {
 
     window.cti_api('addEventListener', { event: 'closed', callback: () => { 
       window.cti_api('hide'); 
-      window.flutter_inappwebview.callHandler('FlutterWebView', JSON.stringify({ event: 'closed' })); 
+      window.FlutterWebView.postMessage(JSON.stringify({ event: 'closed' })); 
     }});
 
     window.cti_api('addEventListener', { event: 'new-agent-message', callback: () => { 
-      window.flutter_inappwebview.callHandler('FlutterWebView', JSON.stringify({ event: 'new-agent-message' })); 
+      window.FlutterWebView.postMessage(JSON.stringify({ event: 'new-agent-message' })); 
     }});
 
     window.cti_api('addEventListener', { event: 'ready', callback: () => { 
-      window.flutter_inappwebview.callHandler('FlutterWebView', JSON.stringify({ event: 'ready' })); 
+      window.FlutterWebView.postMessage(JSON.stringify({ event: 'ready' })); 
     }});
   ''';
 }
@@ -60,10 +60,10 @@ String generateScriptGetError(String channelId) {
       }).then((response) => {
         if (response.status !== 200) {
           console.error('Error fetching config');
-          window.flutter_inappwebview.callHandler('FlutterWebView', JSON.stringify({ event: 'error', message: 'missing_config' }));
+          window.FlutterWebView.postMessage(JSON.stringify({ event: 'error', message: 'missing_config' }));
         }
       }).catch((error) => {
-        window.flutter_inappwebview.callHandler('FlutterWebView', JSON.stringify({ event: 'error', message: error.toString() }));
+        window.FlutterWebView.postMessage(JSON.stringify({ event: 'error', message: error.toString() }));
       });
     })();
   ''';
