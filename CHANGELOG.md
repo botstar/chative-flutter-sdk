@@ -1,6 +1,5 @@
-## [0.1.0] - 2024-11-07
-
-- **Initial Release** of the [Chative.IO Flutter Widget](https://github.com/botstar/chative-flutter-sdk).
+## 0.0.1
+- **Initial Release** of the [Chative.IO Flutter Widget](https://github.com/botstar/chative-flutter-sdk) on 2024-11-08.
 - **Customizable Chat Interface**: Easily tailor the chat widget to match your app's design.
 - **Programmatic Show/Hide**: Display or hide the chat widget using `ChativeWidgetController`.
 - **Custom Header Components**: Integrate custom headers to enhance the chat experience.
@@ -16,7 +15,6 @@
   - `hide()`: Hide the chat widget.
   - `injectJavascript(String script)`: Inject custom JavaScript into the chat widget.
   - `reload()`: Reload the chat widget.
-- **Integrated Dependencies**:
-  - Included `flutter_inappwebview` for webview functionalities, requiring only configuration.
+  - `clearData()`: Clear data (localStorage) the chat widget
 
 

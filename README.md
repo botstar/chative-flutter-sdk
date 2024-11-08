@@ -2,6 +2,15 @@
 
 [Chative.IO](https://chative.io/) Widget is a Flutter package that provides an easy-to-use chat widget for your mobile applications. It allows you to integrate a customizable chat interface with minimal setup.
 
+[![pub package](https://img.shields.io/pub/v/chative_sdk.svg)](https://img.shields.io/pub/v/chative_sdk.svg)
+
+## Requirements
+
+- Dart sdk: ">=3.0.0"
+- Flutter: ">=3.x"
+- Android: `minSdkVersion >= 19`, `compileSdk >= 34`, [AGP](https://developer.android.com/build/releases/gradle-plugin) version `>= 7.3.0` (use [Android Studio - Android Gradle plugin Upgrade Assistant](https://developer.android.com/build/agp-upgrade-assistant) for help), support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
+- iOS 12.0+: `--ios-language swift`, Xcode version `>= 15.0`
+
 ## Features
 
 - **Customizable Chat Interface**: Tailor the chat widget to match your app's design.
@@ -32,7 +41,7 @@ Then, run:
 flutter pub get --no-example
 ```
 
-> **Note**: This library already includes [`flutter_inappwebview`](https://pub.dev/packages/flutter_inappwebview). Ensure you follow the [flutter_inappwebview configuration instructions](https://pub.dev/packages/flutter_inappwebview#installation) for your platform.
+> **Note**: This library already includes [`webview_flutter`](https://pub.dev/packages/webview_flutter). Ensure you follow the [webview_flutter configuration instructions](https://pub.dev/packages/webview_flutter/install) for your platform.
 
 ## Usage
 
