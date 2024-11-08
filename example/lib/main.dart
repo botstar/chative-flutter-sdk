@@ -58,7 +58,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final ChativeWidgetController _controller = ChativeWidgetController();
 
-  final channelId = 's3bdde97e-894d-4092-a021-d7c04cc2602f';
+  final channelId = 'CHANNEL_ID';
+  //@ Can bind user data to the chat widget
   // Map<String, Object>? user = {
   //   'user_id': 'UNIQUE_USER_ID',
   //   'user': {
