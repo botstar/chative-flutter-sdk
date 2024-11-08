@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:chative_sdk/src/constants.dart';
 import 'package:chative_sdk/src/utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 typedef OnClosed = void Function();
 typedef OnLoaded = void Function();
@@ -122,22 +121,7 @@ class WebviewState extends State<Webview> {
                     IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () => Navigator.pop(context),
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.open_in_browser),
-                          onPressed: () async {
-                            if (await canLaunchUrl(Uri.parse(url))) {
-                              await launchUrl(
-                                Uri.parse(url),
-                                mode: LaunchMode.externalApplication,
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                    )
                   ],
                 ),
               ),
