@@ -155,23 +155,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
 ### Explanation
 
-1. **Import Packages**:  
+1. **Import Packages**:
    Import the necessary packages, including `chative_sdk`.
 
-2. **Initialize the App**:  
+2. **Initialize the App**:
    The `MyApp` class sets up the `MaterialApp` with a `HomeScreen` as the home.
 
-3. **Create the Chat Screen**:  
-   - **Controller Initialization**:  
+3. **Create the Chat Screen**:
+   - **Controller Initialization**:
      Instantiate `ChativeWidgetController` to manage the chat widget's state.
-   
-   - **User Information**:  
+
+   - **User Information**:
      Define a `user` map with necessary user details.
-   
-   - **Show Chat Widget**:  
+
+   - **Show Chat Widget**:
      An `ElevatedButton` triggers the `show()` method on the controller to display the chat widget.
-   
-   - **ChativeWidget Configuration**:  
+
+   - **ChativeWidget Configuration**:
      The `ChativeWidget` is placed within a `Stack` to overlay it on top of the main content. Configure properties like `channelId`, `user`, `insetTop`, and callback functions to handle different states and events.
 
 ## Properties
