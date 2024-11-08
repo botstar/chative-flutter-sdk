@@ -22,7 +22,7 @@
 
 ## Screenshot
 
-<img src="./screenshot/screenshot.png" alt="screenshot" width="350">
+<img src="https://raw.githubusercontent.com/botstar/chative-flutter-sdk/HEAD/screenshot/screenshot.png" alt="screenshot" width="350">
 
 ## Installation
 
