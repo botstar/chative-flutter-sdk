@@ -129,4 +129,11 @@ class WebviewState extends State<Webview> {
       await _controller!.reload();
     }
   }
+
+  Future<void> clearLocalStorage() async {
+    if (_controller != null) {
+      await _controller!.evaluateJavascript(source: 'localStorage.clear();');
+      reload();
+    }
+  }
 }

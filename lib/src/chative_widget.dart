@@ -25,6 +25,10 @@ class ChativeWidgetController {
   Future<void> reload() async {
     await _state.reload();
   }
+
+  Future<void> clearData() async {
+    await _state.clearLocalStorage();
+  }
 }
 
 class ChativeWidget extends StatefulWidget {
@@ -99,6 +103,10 @@ class _ChativeWidgetState extends State<ChativeWidget> {
     await _webViewKey.currentState?.injectJavaScript(script);
   }
 
+  Future<void> clearLocalStorage() async {
+    await _webViewKey.currentState?.clearLocalStorage();
+  }
+
   final GlobalKey<WebviewState> _webViewKey = GlobalKey<WebviewState>();
 
   @override
@@ -117,7 +125,6 @@ class _ChativeWidgetState extends State<ChativeWidget> {
             decoration: widget.containerDecoration ??
                 const BoxDecoration(
                   color: Colors.white,
-                  // boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10),],
                 ),
             child: Column(
               children: [
