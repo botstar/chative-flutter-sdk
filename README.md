@@ -91,6 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _controller.show();
   }
 
+  void _clearData() {
+    _controller.clearData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,11 +104,20 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           Center(
-            child: ElevatedButton(
-              onPressed: _showChat,
-              child: const Text('Show Chat Widget'),
-            ),
-          ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: _showChat,
+                  child: Text('Show Chat Widget'),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _clearData,
+                  child: Text('Clear Data'),
+                ),
+              ],
+          )),
           ChativeWidget(
             channelId: channelId,
             controller: _controller,
@@ -175,6 +188,7 @@ The following methods are available via the `ChativeWidgetController`:
 - **`hide()`**: Hide the chat widget.
 - **`injectJavascript(String script)`**: Inject custom JavaScript into the chat widget.
 - **`reload()`**: Reload the chat widget.
+- **`clearData()`**: Clear data (localStorage) the chat widget
 
 ### Example
 
