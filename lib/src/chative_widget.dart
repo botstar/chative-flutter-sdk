@@ -179,7 +179,6 @@ class _ChativeWidgetState extends State<ChativeWidget> {
     if (isScriptSafe(script)) {
       await _webViewKey.currentState?.injectJavaScript(script);
     } else {
-      print('Unsafe script: $script');
       widget.onError?.call('unsafe_script');
     }
   }
