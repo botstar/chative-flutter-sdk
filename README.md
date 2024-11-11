@@ -41,7 +41,11 @@ Then, run:
 flutter pub get --no-example
 ```
 
-> **Note**: This library already includes [`webview_flutter`](https://pub.dev/packages/webview_flutter). Ensure you follow the [webview_flutter configuration instructions](https://pub.dev/packages/webview_flutter/install) for your platform.
+> **Note**: This library includes [`webview_flutter`](https://pub.dev/packages/webview_flutter/versions/4.5.0) and uses [`file_picker`](https://pub.dev/packages/file_picker/versions/7.0.2).  
+> To avoid errors, ensure you follow the configuration instructions for both:  
+> - [webview_flutter setup](https://pub.dev/packages/webview_flutter/versions/4.5.0)  
+> - [file_picker setup](https://pub.dev/packages/file_picker/versions/7.0.2)
+
 
 ## Usage
 
@@ -210,6 +214,9 @@ _controller.hide();
 
 // To reload the chat widget
 await _controller.reload();
+
+// To clear data on the chat widget
+await _controller.clearData();
 ```
 
 ## Customization
