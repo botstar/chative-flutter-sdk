@@ -17,4 +17,16 @@
   - `reload()`: Reload the chat widget.
   - `clearData()`: Clear data (localStorage) the chat widget
 
+*Release Date: 2024-11-08*
+
+## 0.5.1
+
+### Android
+- **Bug Fix**: Resolved issue with file selection in the file picker.
+
+### Global
+- **Bug Fix**: Addressed uninitialized `_state` error occurring in various method calls within `ChativeWidgetController`.
+
+*Release Date: 2024-11-11*
+
 
