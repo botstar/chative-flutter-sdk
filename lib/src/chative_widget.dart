@@ -76,15 +76,35 @@ class ChativeWidgetController {
 /// A StatefulWidget that displays a chat interface using WebView
 class ChativeWidget extends StatefulWidget {
   final ChativeWidgetController? controller;
+
+  /// The channel ID to be used for the chat widget
   final String channelId;
+
+  /// The user data to be passed to the chat widget
   final Map<String, dynamic>? user;
+
+  /// The widget to be displayed as the header of the chat widget
   final Widget? headerWidget;
+
+  /// The decoration to be applied to the chat widget container
   final BoxDecoration? containerDecoration;
+
+  /// The top inset of the chat widget
   final double insetTop;
+
+  /// The bottom inset of the chat widget
   final double insetBottom;
+
+  /// Callback function to be called when the chat widget is closed
   final OnClosed? onClosed;
+
+  /// Callback function to be called when the chat widget is loaded
   final OnLoaded? onLoaded;
+
+  /// Callback function to be called when a new message is received
   final OnNewMessage? onNewMessage;
+
+  /// Callback function to be called when an error occurs
   final OnError? onError;
 
   const ChativeWidget({

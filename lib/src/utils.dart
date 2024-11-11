@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chative_sdk/src/constants.dart';
 
+/// Generates the JavaScript script to be injected into the WebView
 String generateScript(Map<String, dynamic> user) {
   String userString = jsonEncode(user);
   return '''
@@ -37,6 +38,7 @@ String generateScript(Map<String, dynamic> user) {
   ''';
 }
 
+/// Generates the JavaScript script to be injected into the WebView to get the config
 String generateScriptGetError(String channelId) {
   return '''
     function getTimeZone() {
@@ -69,6 +71,7 @@ String generateScriptGetError(String channelId) {
   ''';
 }
 
+/// Converts a Dart object into a JavaScript object string
 String widgetApi(String event, dynamic data) {
   String dataString;
   if (data is String) {
@@ -117,4 +120,13 @@ bool isScriptSafe(String script) {
   }
 
   return true;
+}
+
+/// Safely parses a JSON string into a Map
+Map<String, dynamic> parseJson(String message) {
+  try {
+    return jsonDecode(message) as Map<String, dynamic>;
+  } catch (e) {
+    return {};
+  }
 }

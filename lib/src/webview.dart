@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -16,22 +15,33 @@ typedef OnNewMessage = void Function();
 typedef OnError = void Function(String message);
 
 class Webview extends StatefulWidget {
+  /// The unique identifier of the channel
   final String channelId;
+
+  /// The user information to be passed to the widget
   final Map<String, dynamic>? user;
+
+  /// Callback when the widget has loaded
   final OnLoaded? onLoaded;
+
+  /// Callback when the widget has been closed
   final OnClosed? onClosedWidget;
+
+  /// Callback when a new message has been received
   final OnNewMessage? onNewMessage;
+
+  /// Callback when an error has occurred
   final OnError? onError;
 
   const Webview({
-    Key? key,
+    super.key,
     required this.channelId,
     this.user,
     this.onLoaded,
     this.onClosedWidget,
     this.onNewMessage,
     this.onError,
-  }) : super(key: key);
+  });
 
   @override
   State<Webview> createState() => WebviewState();
@@ -72,7 +82,7 @@ class WebviewState extends State<Webview> {
 
   /// Handles JavaScript messages received from the WebView
   void _handleJavaScriptMessage(JavaScriptMessage message) {
-    final parsedData = _parseJson(message.message);
+    final parsedData = parseJson(message.message);
 
     switch (parsedData['event']) {
       case 'closed':
@@ -90,15 +100,6 @@ class WebviewState extends State<Webview> {
       default:
         // Do nothing for unrecognized events
         break;
-    }
-  }
-
-  /// Safely parses a JSON string into a Map
-  Map<String, dynamic> _parseJson(String message) {
-    try {
-      return jsonDecode(message) as Map<String, dynamic>;
-    } catch (e) {
-      return {};
     }
   }
 
@@ -203,6 +204,12 @@ class WebviewState extends State<Webview> {
 
   /// Displays an external WebView when the URL is outside the widgetUrl
   void _showExternalWebView(String url) {
+    Uri uri = Uri.parse(url);
+
+    if (uri.scheme != 'https' && uri.scheme != 'http') {
+      return;
+    }
+
     _externalController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(url));
